@@ -1,0 +1,87 @@
+<% include header %>
+<h1> bravo </h1>
+
+<p><div id="infoDash"></div></p>
+ <div class="container" id="tourpackages-carousel">
+      
+      <div class="row" id="Suggestion">
+      	<ul>
+        
+       <!-- <div class="col-xs-18 col-sm-6 col-md-3">
+          <div class="thumbnail">
+            <img src="http://placehold.it/500x300" alt="">
+              <div class="caption">
+                <h4>Thumbnail label</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, soluta, eligendi doloribus sunt minus amet sit debitis repellat. Consectetur, culpa itaque odio similique suscipit</p>
+                <p><a href="#" class="btn btn-info btn-xs" role="button">Button</a> <a href="#" class="btn btn-default btn-xs" role="button">Button</a></p>
+            </div>
+          </div>
+        </div> -->
+       </ul>
+  </div>
+ </div>
+
+<script>
+$(function(){
+	console.log('coucou')
+
+if ('<%= user %>'){
+
+	var $pseudo = '<%= user.pseudo %>';
+	var $pref = '<%= user.pref %>';
+	var $sexe = '<%= user.sexe %>';
+	console.log('<%= user.pseudo %>, pref :<%= user.pref %>, sexe: <%= user.sexe %>');
+	var $tag = '<%= user.tag %>';
+	
+	console.log('tag: ,', $tag)
+
+	var $geo = {};
+	$geo.lat = '<%= user.geo.lat %>';
+	$geo.lon = '<%= user.geo.lon %>';
+	 
+
+	 console.log($geo)
+
+	//console.log(JSON.parse('<%= user.geo %>'))
+}
+else console.log('nop')
+
+console.log($('#infoDash'))
+
+
+
+	if ($pseudo && $pref && $sexe && $geo.lat && $tag){
+
+		$.post(
+        	'dashboard/dash',
+         	{
+           	    pref : $pref,
+               	pseudo : $pseudo,
+               	sexe: $sexe,
+               	geo : JSON.stringify($geo),
+               	tag : $tag
+            },
+            function(data){
+            	if (data){
+            		var users = JSON.parse(data);
+            		for (i = 0; i < users.length; i++){
+            			$('#Suggestion').append('<div id="sugUser" class="col-xs-18 col-sm-6 col-md-3">'+ users[i].pseudo +' </div>')
+
+
+            			console.log('users name: ', users[i].pseudo)
+            		}
+            	} else $("#infoDash").html('Probleme serveur query suggestion');
+            		
+            //  $("#infoDash").html(JSON.parse(data);
+            },
+            'text'
+         );
+
+	} else $("#infoDash").html('Veuillez renseigné vos preférence et votre sexe et votre location');
+
+	
+})
+
+	
+</script>
+<% include footer %>

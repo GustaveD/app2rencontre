@@ -1,0 +1,359 @@
+<% include header %>
+<div class="container text-center">
+	<h1>PROFILE</h1>
+</div>
+<div class="container text-center">
+<br>
+<br>
+
+ <form class="form-inline">
+  <div class="form-group">
+    <label for="email">Email : <span id="validator_email" style="display: none; color:green;" class="glyphicon glyphicon-ok"></span><span id="unvalidator_email" style="color:red;" class="glyphicon glyphicon-remove"></span></label>
+    <input type="email" class="form-control" id="email" value="<%= user.email %>" />
+  </div>
+  <button id="b_email" type="submit" class="btn btn-default">Submit</button>
+  <div class="form-group" id="result_email"></div>
+ </form>
+ <br>
+<hr>
+
+ <form class="form-inline">
+  <div class="form-group">
+    <label for="pwd">Pwd :  <span id="validator_pwd" style="display: none; color:green;" class="glyphicon glyphicon-ok"></span><span id="unvalidator_pwd" style="color:red;" class="glyphicon glyphicon-remove"></span></label>
+    <input type="password" class="form-control" id="pwd">
+  </div>
+  <button id="b_pwd" type="submit" class="btn btn-default">Submit</button>
+  <div class="form-group" id="result_pwd"></div>
+ </form>
+
+<br>
+<hr>
+
+<form class="form-inline">
+  <div class="form-group">
+    <label for="nom">nom :  <span id="validator_nom" style="display: none; color:green;" class="glyphicon glyphicon-ok"></span><span id="unvalidator_nom" style="color:red;" class="glyphicon glyphicon-remove"></span></label>
+    <input type="nom" class="form-control" id="nom" value="<%= user.nom %>">
+  </div>
+  <div class="form-group">
+    <label for="prenom">prenom :  <span id="validator_prenom" style="display: none; color:green;" class="glyphicon glyphicon-ok"></span><span id="unvalidator_prenom" style="color:red;" class="glyphicon glyphicon-remove"></span></label>
+    <input type="prenom" class="form-control" id="prenom" value="<%= user.nom %>">
+  </div>
+  <button id="b_nom" type="submit" class="btn btn-default">Submit</button>
+  <div class="form-group" id="result_gender"></div>
+ </form>
+
+
+<br>
+<hr>
+
+<form class="form-horizontal">
+  <div class="form-group">
+    <label for="sexe">sexe :  <span id="validator_sexe" style="display: none; color:green;" class="glyphicon glyphicon-ok"></span><span id="unvalidator_sexe" style="color:red;" class="glyphicon glyphicon-remove"></span></label><br>
+    <label class="radio-inline"><input name="sexe" type="radio" value="h" id="sexe">
+    	<i class="fa fa-mars"></i>
+    </label>
+<label class="radio-inline"><input name="sexe" type="radio" value="f" id="sexe"><i class="fa fa-venus"></i></label>
+  </div>
+  <div class="form-group">
+    <label for="preference">preference :  <span id="validator_pref" style="display: none; color:green;" class="glyphicon glyphicon-ok"></span><span id="unvalidator_pref" style="color:red;" class="glyphicon glyphicon-remove"></span></label>
+    <br>
+    <label class="radio-inline"><input name="pref" type="radio" value="h" id="pref"><i class="fa fa-mars"></i></label>
+<label class="radio-inline"><input name="pref" type="radio" value="f" id="pref"><i class="fa fa-venus"></i></label>
+<label class="radio-inline"><input name="pref" type="radio" value="x" id="pref"><i class="fa fa-venus-mars"></i></label>
+  </div>
+  <button id="b_gender" type="submit" class="btn btn-default">Submit</button>
+  <div class="form-group" id="result_sexe"></div>
+ </form>
+
+
+<br>
+<hr>
+
+<form class="form-horizontal">
+
+	  <div class="form-group">
+        <label>What do you like?
+        <span id="validator_tag" style="display: none; color:green;" class="glyphicon glyphicon-ok"></span><span id="unvalidator_tag" style="color:red;" class="glyphicon glyphicon-remove"></span>
+        </label>
+            <select id="hashtag" name="hashtag" class="selectpicker" multiple>
+             <option>Art</option>
+             <option>Musique</option>
+             <option>Litterature</option>
+             <option>Sport</option>
+             <option>Art_Martiaux</option>
+             <option>Culture</option>
+             <option>Science</option>
+             <option>Informatique</option>
+             <option>Chill</option>
+             <option>Politique</option>
+             <option>Jeux Vidéo</option>
+         </select>
+
+        </div>
+
+        <div class = "form-group">
+            <label>Put some #hobbies: <span id="validator_tag2" style="display: none; color:green;" class="glyphicon glyphicon-ok"></span><span id="unvalidator_tag2" style="color:red;" class="glyphicon glyphicon-remove"></span></label>
+            <textarea class="form-control" rows="3" id="hobbies" name="hashtag" maxlength="200" placeholder="Put some #hobbies (200 caractères)" value=""></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Tell us about you: <span id="validator_bio" style="display: none; color:green;" class="glyphicon glyphicon-ok"></span><span id="unvalidator_bio" style="color:red;" class="glyphicon glyphicon-remove"></span></label>
+  				<textarea class="form-control" rows="4" id="bio" name="bio" maxlength="200" placeholder="Biographie (200 caractères)" value=""></textarea>
+		</div>
+
+  <button id="b_tag" type="submit" class="btn btn-default">Submit</button>
+  <div class="form-group" id="result_tag"></div>
+
+
+ <br>
+<hr>
+
+
+</div>
+
+<script>
+	$(function(){
+
+		 if(navigator.geolocation){
+       navigator.geolocation.getCurrentPosition(function(position){
+            //$("#geoResult").val(JSON.stringify(cloneAsObject(position.coords)));
+        })
+   }
+
+		$('#b_email').click(function(e){
+			e.preventDefault();
+
+			var $email = $("#email").val();
+
+			console.log('email: ', $email);
+
+			if (check($email)){
+        	 	$.post(
+            		'profile/email',
+            		{
+            	    	email : $email,
+            		},
+            		function(data){
+            			if (data){
+            	  			$("#result_email").html(data);
+            	  			$("#validator_email").css({display: 'inline'})
+            	  			$("#unvalidator_email").css({display: 'none'})
+            			}
+            	  		else{
+            	  			$("#result_email").html('Une erreur serveur est survenue');
+            	  			$("#validator_email").css({display: 'none'})
+            	  			$("#unvalidator_email").css({display: 'inline'})
+
+            	  		}
+            	  		
+            		},
+            		'text'
+        		);
+        	} else{
+        		$("#result_email").html('le champ est vide');
+        		$("#validator_email").css({display: 'none'})
+            	$("#unvalidator_email").css({display: 'inline'})
+        	}
+    	});
+
+
+
+		$('#b_pwd').click(function(e){
+			e.preventDefault();
+
+			var $pwd = $("#pwd").val();
+
+			console.log('pwd: ', $pwd);
+
+			if (check($pwd)){
+        	 	$.post(
+            		'profile/pwd',
+            		{
+            	    	pwd : $pwd,
+            		},
+            		function(data){
+            	  		if (data){
+            	  			$("#result_pwd").html(data);
+            	  			$("#validator_pwd").css({display: 'inline'})
+            	  			$("#unvalidator_pwd").css({display: 'none'})
+            			}
+            	  		else{
+            	  			$("#result_pwd").html('Une erreur serveur est survenue');
+            	  			$("#validator_pwd").css({display: 'none'})
+            	  			$("#unvalidator_pwd").css({display: 'inline'})
+
+            	  		}
+            	  		
+            		},
+            		'text'
+        		);
+        	} else{
+        		$("#result_pwd").html('le champ est vide');
+        		$("#validator_pwd").css({display: 'none'})
+            	$("#unvalidator_pwd").css({display: 'inline'})
+        	}
+    	});
+
+
+		$('#b_nom').click(function(e){
+			e.preventDefault();
+
+			var $nom = $("#nom").val();
+			var $prenom = $('#prenom').val();
+
+			console.log('nom: ', $nom);
+			console.log('prenom: ', $prenom);
+
+			if (check($nom) &&
+				check($prenom)){
+        	 	$.post(
+            		'profile/nom',
+            		{
+            	    	nom : $nom,
+            	    	prenom : $prenom,
+            		},
+            		function(data){
+            	  		if (data){
+            	  			$("#result_nom").html(data);
+            	  			$("#validator_nom").css({display: 'inline'})
+            	  			$("#unvalidator_nom").css({display: 'none'})
+            	  			$("#validator_prenom").css({display: 'inline'})
+            	  			$("#unvalidator_prenom").css({display: 'none'})
+            			}
+            	  		else{
+            	  			$("#result_nom").html('Une erreur serveur est survenue');
+            	  			$("#validator_nom").css({display: 'none'})
+            	  			$("#unvalidator_nom").css({display: 'inline'})
+            	  			$("#validator_prenom").css({display: 'none'})
+            	  			$("#unvalidator_prenom").css({display: 'inline'})
+
+            	  		}
+            	  		
+            		},
+            		'text'
+        		);
+        	} else{
+        		$("#result_nom").html('le champ est vide');
+        		$("#validator_nom").css({display: 'none'})
+            	$("#unvalidator_nom").css({display: 'inline'})
+            	$("#validator_prenom").css({display: 'none'})
+            	$("#unvalidator_prenom").css({display: 'inline'})
+        	}
+    	});
+		
+
+
+
+		$('#b_gender').click(function(e){
+			e.preventDefault();
+
+			var $sexe = $('input[name="sexe"]:checked').val();
+			var $pref = $('input[name="pref"]:checked').val();
+
+			console.log('sexe: ', $sexe);
+			console.log('pref: ', $pref);
+
+			if ($sexe &&
+				$pref){
+        	 	$.post(
+            		'profile/gender',
+            		{
+            	    	sexe : $sexe,
+            	    	pref : $pref,
+            		},
+            		function(data){
+            	  		if (data){
+            	  			$("#result_tag").html(data);
+            	  			$("#validator_sexe").css({display: 'inline'})
+            	  			$("#unvalidator_sexe").css({display: 'none'})
+            	  			$("#validator_pref").css({display: 'inline'})
+            	  			$("#unvalidator_pref").css({display: 'none'})
+            			}
+            	  		else{
+            	  			$("#result_tag").html('Une erreur serveur est survenue');
+            	  			$("#validator_sexe").css({display: 'none'})
+            	  			$("#unvalidator_sexe").css({display: 'inline'})
+            	  			$("#validator_pref").css({display: 'none'})
+            	  			$("#unvalidator_pref").css({display: 'inline'})
+
+            	  		}
+            	  		
+            		},
+            		'text'
+        		);
+        	} else{
+        		$("#result_tag").html('le champ est vide');
+        		$("#validator_sexe").css({display: 'none'})
+            	$("#unvalidator_sexe").css({display: 'inline'})
+            	$("#validator_pref").css({display: 'none'})
+            	$("#unvalidator_pref").css({display: 'inline'})
+        	}
+    	});
+
+
+
+    	$('#b_tag').click(function(e){
+			e.preventDefault();
+
+			var tag = $("#hashtag").val() || {};
+			var $tag2 = $("#hobbies").val();
+			var $bio = $("#bio").val();
+
+			if (tag && $tag2 && $bio){
+				console.log('tag:', tag)
+        	 	$.post(
+            		'profile/tag',
+            		{
+            			tag: JSON.stringify(tag),
+            			tag2: $tag2,
+            			bio: $bio,
+
+            		},
+            		function(data, err){
+            	  		if (data){
+            	  			$("#result_tag").html(data);
+            	  			$("#validator_tag").css({display: 'inline'})
+            	  			$("#unvalidator_tag").css({display: 'none'})
+            	  			$("#validator_tag2").css({display: 'inline'})
+            	  			$("#unvalidator_tag2").css({display: 'none'})
+            	  			$("#validator_bio").css({display: 'inline'})
+            	  			$("#unvalidator_bio").css({display: 'none'})
+            			}
+            	  		else{
+            	  			$("#result_tag").html('Une erreur serveur est survenue');
+            	  			$("#validator_tag").css({display: 'none'})
+            	  			$("#unvalidator_tag").css({display: 'inline'})
+            	  			$("#validator_tag2").css({display: 'none'})
+            	  			$("#unvalidator_tag2").css({display: 'inline'})
+            	  			$("#validator_bio").css({display: 'none'})
+            	  			$("#unvalidator_bio").css({display: 'inline'})
+
+            	  		}
+            	  		
+            		},
+            		'text'
+        		);
+        	} else{
+        		$("#result_tag").html('le champ est vide');
+        		$("#validator_tag").css({display: 'none'})
+            	$("#unvalidator_tag").css({display: 'inline'})
+            	$("#validator_tag2").css({display: 'none'})
+            	$("#unvalidator_tag2").css({display: 'inline'})
+            	$("#validator_bio").css({display: 'none'})
+            	$("#unvalidator_bio").css({display: 'inline'})
+        	}
+    	});
+	})
+
+	function check(champs, champName){
+        if(champs == "")
+          return false;
+        else return true;
+    }
+
+
+
+
+</script>
+
+<% include footer %>

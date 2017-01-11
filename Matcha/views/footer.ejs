@@ -1,0 +1,333 @@
+<nav class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container-fluid">
+          <!-- HOME
+
+
+
+        -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/dashboard">Tableau de Bord</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <!-- PROFILE
+
+
+
+        --> 
+        <li class="active">
+          <a href="/profile">
+            <span class="glyphicon glyphicon-user"></span>
+            </a>
+        </li>
+          <!-- PHOTO
+
+
+
+        -->
+        <li>
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#imgModal">
+                <span class="glyphicon glyphicon-camera"></span>
+            </button>
+            <div class="modal fade" id="imgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p>
+                      <h4 class="modal-title" id="myModalLabel">Mes photos</h4>
+                      <span class="glyphicon glyphicon-user"> photo de profile: </span>
+                    <img src="<%= user.img[0] %>" class="img-thumbnail" alt="Cinque Terre" width="100" height="75">
+                    </p>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      <strong>Ajouter des images:</strong>
+                      <form class="" id="uploadImgForm" enctype="multipart/form-data" action="/profile/img" method="post">
+                        <div class="form-group">
+                          <input id="img" class="btn btn-info" type="file" name="userImg" multiple style="display:inline;"/>
+                        </div>
+                        <div class="form-group">
+                          <span id="status"></span>
+                        </div>
+                        <div class="form-group">
+                          <input id="b_img" class="btn btn-default"  value="Upload" type="submit">
+                        </div>
+                      </form>
+                    </p>
+                    <hr>
+                    <p>
+                    <% for (var i = 0 ; i < user.img.length; i++) { %>
+                    <div class="container">
+                      <strong>Mes images:</strong>
+                      <div class="row">
+                      <div id="resultImg"></div>
+                      
+                      <button id="img_button2" class="btn btn-default btn-lg btn-link" onclick="deleteImg('<%= user.img[i] %>')" type="button" style="font-size:16px;" title="Dashboard">
+                          <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button id="img_button1" class="btn btn-default btn-lg btn-link" onclick="changeProfilePicture('<%= user.img[i] %>', '<%= i %>')" type="button" style="font-size:16px;" title="Dashboard">
+                          <span class="glyphicon glyphicon-eye-open"></span>
+                        </button>
+                        <div class="col-md-3 col-sm-4 col-xs-6"><img class="img-responsive" src="<%= user.img[i] %>" /></div>
+                      
+                      </div>
+
+                    <hr>         
+                  </div>
+                  <% } %>
+                  </p>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+            <!-- GEO
+
+
+  
+        -->
+          <li>
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#geoModal">
+                <span class="glyphicon glyphicon-screenshot"></span>
+            </button>
+            <div class="modal fade" id="geoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p>
+                      <strong>Changer de position:</strong>
+                    <p>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      <form>
+                        <div class="form-group">
+                          <label >
+                            <strong>Lat:</strong>
+                          </label>
+                          <input id="lat" style="" type="number" name="Latitude" min="-90" max="90" value="<%= user.geo.lat %>" step="0.001">
+                        </div>
+                        <div class="form-group">
+                        <label>
+                          <strong>Lon:</strong>
+                        </label>
+                          <input id="lon" style="" type="number" name="longitude" min="-180" max="180" value="<%= user.geo.lon %>" step="0.001">
+                        </div>
+                        <hr>
+                        <div id="town">                
+                        </div>
+                        <button id="my_loc">
+                          Find my place<span class="glyphicon glyphicon-screenshot"></span>
+                        </button>
+                        <hr>
+                        <button type="submit" id="geo_form" class="btn btn-default">Envoyer</button>
+                      </form>
+                    </p> 
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+      
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-heart"></span><span class="badge">0</span></a>
+          <ul class="dropdown-menu">
+            <li>
+                <p>
+                  <strong>
+                    Vos Notifications:
+                  </strong>
+                  </p>
+              </li>
+                <ul id="notifliking">
+                </ul>
+              <li id="" role="separator" class="divider">        
+              </li>
+              <li>
+                <p>
+                  <strong>Ils vous aimes:</strong>
+                </p>
+              </li>
+              <ul id ="all_like">
+              </ul>
+              <li role="separator" class="divider"></li>
+              <li>
+                <p><strong>Ils vous ont visités:</strong></p>
+              </li>
+          </ul>
+        </li>
+
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-envelope"></span><span class="badge">0</span></a>
+          <ul class="dropdown-menu">
+              <input type="text" name="salut"/>
+              <button type="submit"></button>
+
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+
+
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-list"></span><span class="badge">0</span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+
+
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <label style=" margin: 10%, 10%, 10%, 10%;" class="badge"><span> Pop: </span><%= user.pop %>  </label>
+        </li>
+        <li>
+          <a href="/connexion/logout">
+            <span class="glyphicon glyphicon-off"></span>
+          </a>
+        </li>
+      </ul>
+
+
+
+
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<script>
+  $(function(){
+
+      console.log('USER: ', '<%= user.img[0] %>')
+
+
+      $('#my_loc').click(function(e){
+        e.preventDefault();
+
+        $.getJSON("http://ip-api.com/json/?callback=?", function(data) {
+          console.log(data.city);
+          $('#lat').val(data.lat);
+          $('#lon').val(data.lon);
+          if (data.city)
+            $('#town').html('<strong>'+data.city+'</strong>');
+
+        });
+      })
+
+
+
+
+
+        $('#uploadImgForm').submit(function() {
+        $("#status").empty().text("File is uploading...");
+        $(this).ajaxSubmit({
+            error: function(xhr) {
+              $("#status").empty().text(xhr);
+            },
+            success: function(response) {
+            $("#status").empty().text(response);
+            }
+        });
+    return false;
+    });
+      
+
+
+
+       $("#geo_form").click(function(e){
+       e.preventDefault();
+
+
+       let $lat = $("#lat").val(),
+            $lon = $("#lon").val();
+
+            console.log('lat: ', $lat, 'lon', $lon);
+        if ($lat && $lon){
+          $.post(
+            'profile/geo',
+            {
+                lat : $lat,
+                lon : $lon,
+            },
+            function(data){
+              console.log('data',data)
+              $("#town").html('<strong>'+data+'</strong>');
+            },
+            'text'
+         )}
+          else $("#town").html('<strong>Met une position</strong>');
+
+        
+       });
+     
+
+  })
+
+  function deleteImg(path, i){
+        var $path = path;
+        
+
+        $.post(
+            'profile/delImg',
+            {
+                path : $path,
+             
+            },
+            function(data){
+              console.log('data',data)
+              $("#resultImg").html('<strong>'+data+'</strong>');
+            },
+            'text'
+         )
+       }
+
+       function changeProfilePicture(path, i){
+        var $path = path;
+        var $i = i;
+
+        $.post(
+            'profile/changeProfilePic',
+            {
+                path : $path,
+                   i : $i,
+            },
+            function(data){
+              console.log('data',data)
+              $("#resultImg").html('<strong>'+data+'</strong>');
+            },
+            'text'
+         )
+       }
+
+
+
+</script>
+</body>
+</html>
